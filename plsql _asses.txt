@@ -114,6 +114,6 @@ EXCEPTION
    WHEN no_data_found THEN
       raise_application_error(-20115,'No such customer!');
    WHEN others THEN
-      dbms_output.put_line('Error!');
+       raise_application_error(-20117,'Error!');
 END;
 /
