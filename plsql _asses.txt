@@ -1,0 +1,96 @@
+PL/SQL ASSESSMENT 
+
+
+1.create table myemp(Eno number(6) PRIMARY KEY,Ename varchar2(30) NOT NULL,Deptno number(4) NOT NULL,Esal number(8,2));
+
+
+
+alter table myemp add experience number(2) NOT  NULL;
+
+insert all
+    into myemp(Eno,Ename,Deptno,Esal,experience) values(10,'Mathew',100,20000,2)
+    into myemp(Eno,Ename,Deptno,Esal,experience) values(20,'Sumathy',200,15000,3)
+    into myemp(Eno,Ename,Deptno,Esal,experience) values(30,'Delvin',300,5000,4)
+    into myemp(Eno,Ename,Deptno,Esal,experience) values(40,'John',400,45000,8)
+    into myemp(Eno,Ename,Deptno,Esal,experience) values(50,'Laara',500,10000,10)
+    select * from dual;
+
+
+update myemp set Esal=null where Esal >=5000 and Esal <=10000;
+
+
+===========================================
+
+2. update myemp set comm=5 where Eno=20 ;
+
+ALTER TABLE myemp ADD comm number(2) default null; 
+
+update myemp set comm=45 where Eno=10;
+update myemp set comm=50 where Eno=40;
+
+  create table empcommnull as (select eno,ename,comm from myemp where comm IS NULL);
+
+=============================================
+
+
+4.CREATE OR REPLACE TRIGGER sat_sun_trigger BEFORE
+ INSERT OR UPDATE OR DELETE on myemp 
+  FOR EACH ROW
+  DECLARE
+  v_day DATE := TRUNC(SYSDATE);
+  BEGIN
+    IF TO_CHAR(v_day,'DY')IN ('SAT','SUN') THEN
+      dbms_output.put_line('Sorry Access on week-end days is denied');
+    END IF;
+  END; 
+
+insert into myemp values(60,'Zaara',600,80000,4,60);
+
+============================================
+
+
+6.CREATE TABLE ebill( cno varchar2(10) primary key,cname varchar2(30) NOT NULL,nounits number(4) NOT NULL,bamt number(8,2) )
+/
+
+INSERT ALL
+ INTO ebill (cno, cname,nounits,bamt) VALUES ('101', 'Sumi', 1,'')
+  
+        INTO ebill (cno, cname,nounits,bamt) VALUES ('102', 'Zaara', 2,'')
+       
+   INTO ebill (cno, cname,nounits,bamt) VALUES ('103', 'Mathew', 3,'')
+       
+   INTO ebill (cno, cname,nounits,bamt) VALUES ('104', 'John', 4,'')
+        
+  INTO ebill (cno, cname,nounits,bamt) VALUES ('105', 'Delvin', 5,'')
+    
+  SELECT * FROM dual ;
+
+select * from ebill;
+
+
+
+================================
+
+5. DECLARE 
+   d_id myemp.Eno%type := &dd_id; 
+   d_name myemp.Ename%type;  
+   -- user defined exception 
+   ex_invalid_id  EXCEPTION; 
+BEGIN 
+   IF d_id <= 0 THEN 
+      RAISE ex_invalid_id; 
+   ELSE 
+      SELECT Eno,Ename into d_id,d_name from myemp WHERE Eno=d_id; 
+   DBMS_OUTPUT.PUT_LINE (d_id);
+   DBMS_OUTPUT.PUT_LINE ( d_name); 
+   END IF; 
+
+EXCEPTION 
+   WHEN ex_invalid_id THEN 
+      dbms_output.put_line('ID must be greater than zero!'); 
+   WHEN no_data_found THEN 
+      dbms_output.put_line('No such customer!'); 
+   WHEN others THEN 
+      dbms_output.put_line('Error!');  
+END; 
+/
